@@ -60,7 +60,7 @@ export const Badge: React.FC<BadgeProps> = ({
     height = clamp(Math.round(size), minSize, maxSize);
 
     const fontSize = PixelRatio.roundToNearestPixel(height * 0.6);
-    const displayValue = typeof value === 'number' && limit && value > limit ? `${limit}+` : value;
+    const displayValue = typeof value === 'number' && typeof limit === 'number' && value > limit ? `${limit}+` : value;
     const textStyles = [
       {
         fontSize,
