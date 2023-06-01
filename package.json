@@ -1,6 +1,6 @@
 {
   "name": "react-native-userpic",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native user picture / user avatar with support for gravatar, user's initials, unique colors, badges, statuses and more",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
