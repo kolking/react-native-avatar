@@ -1,167 +1,98 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import md5 from 'js-md5';
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import {
   Image,
   ImageStyle,
   ImageSourcePropType,
-  PixelRatio,
   StyleSheet,
   StyleProp,
-  Text,
   TextStyle,
   View,
   ViewProps,
-  ViewStyle,
 } from 'react-native';
 
-import { Badge, BadgeProps } from './Badge';
-import { getInitials, getStringColor, getRadius, useLayout, colorScheme } from './helpers';
+import Initials from './Initials';
+import Badge, { Props as BadgeProps } from './Badge';
+import { colorScheme, debug, getGravatarSource } from './helpers';
 
-export interface UserpicProps extends ViewProps {
+const DEFAULT_COLOR = colorScheme('#aeaeb2', '#636366');
+const DEFAULT_SOURCE: ImageSourcePropType = require('./assets/default.png');
+
+export interface Props extends ViewProps {
   size?: number;
-  borderRadius?: number | string;
   name?: string;
   email?: string;
-  colorize?: boolean;
+  color?: string;
   source?: ImageSourcePropType;
   defaultSource?: ImageSourcePropType;
-  style?: StyleProp<ViewStyle>;
+  borderRadius?: number;
+  colorize?: boolean;
+  style?: StyleProp<ImageStyle>;
   textStyle?: StyleProp<TextStyle>;
-  imageStyle?: StyleProp<ImageStyle>;
   badge?: BadgeProps['value'];
   badgeColor?: BadgeProps['color'];
-  badgeProps?: Omit<BadgeProps, 'value' | 'color'>;
-  badgePosition?: 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
+  badgeProps?: Omit<BadgeProps, 'value' | 'color' | 'parentSize' | 'parentRadius'>;
 }
 
-export const Userpic: React.FC<UserpicProps> = ({
+const Userpic = ({
   size = 50,
-  borderRadius = '50%',
   name,
   email,
-  colorize = false,
   source,
-  defaultSource = require('./assets/default.png'),
+  color = DEFAULT_COLOR,
+  defaultSource = DEFAULT_SOURCE,
+  borderRadius = size / 2,
+  colorize = false,
   style,
   textStyle,
-  imageStyle,
   badge,
   badgeColor,
   badgeProps,
-  badgePosition = 'top-right',
   ...props
-}) => {
-  const getImageSource = useCallback(() => {
-    if (source) {
-      return source;
-    } else if (email) {
-      const emailHash = md5(email.toLowerCase().trim());
-      const pixelSize = PixelRatio.getPixelSizeForLayoutSize(size);
+}: Props) => {
+  const avatarSource = useMemo(() => {
+    return source || (email ? getGravatarSource(size, email) : defaultSource);
+  }, [source, size, email, defaultSource]);
 
-      return { uri: `https://www.gravatar.com/avatar/${emailHash}?s=${pixelSize}&d=404` };
-    }
+  const [imageSource, setImageSource] = useState(avatarSource);
 
-    return defaultSource;
-  }, [source, email, size, defaultSource]);
+  useLayoutEffect(() => {
+    setImageSource(avatarSource);
+  }, [avatarSource]);
 
-  const [{ height: badgeHeight }, onBadgeLayout] = useLayout({ height: 10 });
-  const [{ height: imageHeight }, onImageLayout] = useLayout({ height: size });
-  const [imageSource, setImageSource] = useState(getImageSource);
+  const onImageError = useCallback(() => {
+    setImageSource(defaultSource);
+  }, [defaultSource]);
 
-  useEffect(() => {
-    setImageSource(getImageSource());
-  }, [getImageSource, setImageSource]);
-
-  const onError = useCallback(() => setImageSource(defaultSource), [defaultSource]);
-
-  const initials = useMemo(
-    () =>
-      name &&
-      imageSource === defaultSource && {
-        color: colorize ? getStringColor(name) : undefined,
-        text: getInitials(name),
-      },
-    [name, colorize, imageSource, defaultSource],
-  );
-
-  const radius = getRadius(borderRadius, size);
-
-  const badgeOffset = useMemo(() => {
-    // We want to place the badge at the point with polar coordinates (r,45°)
-    // thus we need to find the distance from the containing square top right corner
-    // which can be calculated as x = r - r × sin(45°)
-    // Self offset is how much we’ll shift the badge from the edge point,
-    // its value ranges from badgeHeight / 4 (square) to badgeHeight / 2 (circle)
-    const selfOffset = badgeHeight * (0.25 + radius / (size * 2));
-    const edgeOffset = radius * (1 - Math.sin((45 * Math.PI) / 180));
-
-    return PixelRatio.roundToNearestPixel(edgeOffset - selfOffset);
-  }, [badgeHeight, radius, size]);
-
-  const rootStyles = [
-    {
-      width: size,
-      height: size,
-      borderRadius: radius,
-    },
-    styles.root,
-    style,
-  ];
-
-  let content = [];
-
-  if (initials) {
-    const fontSize = PixelRatio.roundToNearestPixel(size / 2.5);
-
-    content.push(
-      <Text key="text" style={[{ fontSize }, styles.text, textStyle]} numberOfLines={1}>
-        {initials.text}
-      </Text>,
-    );
-
-    if (initials.color) {
-      rootStyles.push({ backgroundColor: initials.color });
-    }
-  } else {
-    const imageRadius = radius - (size - imageHeight) / 2;
-
-    content.push(
-      <Image
-        key="image"
-        style={[{ borderRadius: imageRadius }, styles.image, imageStyle]}
-        source={imageSource}
-        onLayout={onImageLayout}
-        onError={onError}
-      />,
-    );
-  }
-
-  if (badge) {
-    const [badgeY, badgeX] = badgePosition.split('-');
-    const badgeStyles = [
-      {
-        [badgeY]: badgeOffset,
-        [badgeX]: badgeOffset,
-      },
-      styles.badge,
-      badgeProps?.style,
-    ];
-
-    content.push(
-      <Badge
-        key="badge"
-        value={badge}
-        color={badgeColor}
-        {...badgeProps}
-        style={badgeStyles}
-        onLayout={onBadgeLayout}
-      />,
-    );
-  }
+  debug('RENDER <Userpic>', name || email || imageSource);
 
   return (
-    <View {...props} style={rootStyles}>
-      {content}
+    <View {...props} style={[styles.root, { width: size, height: size }]}>
+      {name && imageSource === defaultSource ? (
+        <Initials
+          size={size}
+          name={name}
+          color={color}
+          colorize={colorize}
+          borderRadius={borderRadius}
+          style={style}
+          textStyle={textStyle}
+        />
+      ) : (
+        <Image
+          style={[styles.image, { borderRadius, backgroundColor: color }, style]}
+          source={imageSource}
+          onError={onImageError}
+        />
+      )}
+      {badge !== undefined && (
+        <Badge
+          {...badgeProps}
+          value={badge}
+          color={badgeColor}
+          parentSize={size}
+          parentRadius={borderRadius}
+        />
+      )}
     </View>
   );
 };
@@ -169,29 +100,11 @@ export const Userpic: React.FC<UserpicProps> = ({
 const styles = StyleSheet.create({
   root: {
     alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colorScheme('#aeaeb2', '#636366'),
   },
   image: {
     width: '100%',
     height: '100%',
   },
-  text: {
-    fontWeight: '700',
-    fontFamily: 'System',
-    includeFontPadding: false,
-    textAlignVertical: 'center',
-    backgroundColor: 'transparent',
-    color: '#fff',
-  },
-  badge: {
-    zIndex: 1,
-    position: 'absolute',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    elevation: 1,
-  },
 });
+
+export default React.memo(Userpic);
