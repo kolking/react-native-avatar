@@ -1,36 +1,28 @@
-import { useCallback, useState } from 'react';
-import { Appearance, LayoutChangeEvent } from 'react-native';
+import md5 from 'js-md5';
+import { Appearance, ImageSourcePropType, PixelRatio } from 'react-native';
 
-type LayoutSize = {
-  width: number;
-  height: number;
-};
-
-export function useLayout(
-  initial?: Partial<LayoutSize>,
-): [LayoutSize, (event: LayoutChangeEvent) => void] {
-  const [size, setSize] = useState(() => ({ width: 0, height: 0, ...initial }));
-  const onLayout = useCallback((event: LayoutChangeEvent) => {
-    const { width, height } = event.nativeEvent.layout;
-    setSize({ width, height });
-  }, []);
-
-  return [size, onLayout];
+/* istanbul ignore next */
+export function debug(...args: any) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(...args);
+  }
 }
 
 export function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(value, max));
 }
 
-export function getRadius(value: number | string, height: number): number {
-  if (typeof value === 'string') {
-    const match = value.match(/^([0-9]|[1-4][0-9]|50)%$/);
-    const percent = match ? parseInt(match[0], 10) : 0;
+export function colorScheme(lightColor: string, darkColor: string) {
+  return Appearance.getColorScheme() === 'dark' ? darkColor : lightColor;
+}
 
-    return (height * percent) / 100;
-  }
+export function getGravatarSource(size: number, email: string): ImageSourcePropType {
+  const emailHash = md5(email.toLowerCase().trim());
+  const pixelSize = PixelRatio.getPixelSizeForLayoutSize(size);
 
-  return value;
+  return {
+    uri: `https://www.gravatar.com/avatar/${emailHash}?s=${pixelSize}&d=404`,
+  };
 }
 
 export function getStringColor(string: string): string {
@@ -59,6 +51,6 @@ export function getInitials(name: string): string {
   return output.toUpperCase();
 }
 
-export function colorScheme(lightColor: string, darkColor: string) {
-  return Appearance.getColorScheme() === 'dark' ? darkColor : lightColor;
+export function getBadgeValue(value: number | string | boolean, limit: number) {
+  return typeof value === 'number' && limit > 0 && value > limit ? `${limit}+` : value;
 }

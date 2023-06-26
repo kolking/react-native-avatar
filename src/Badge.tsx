@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   Animated,
   PixelRatio,
@@ -10,90 +10,122 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { clamp, getRadius } from './helpers';
+import { clamp, debug, getBadgeValue } from './helpers';
 
-const minSize = 15;
-const maxSize = 40;
+const MIN_SIZE = 15;
+const MAX_SIZE = 45;
 
-export interface BadgeProps extends ViewProps {
+export enum BadgePositions {
+  TOP_LEFT = 'top-left',
+  TOP_RIGHT = 'top-right',
+  BOTTOM_LEFT = 'bottom-left',
+  BOTTOM_RIGHT = 'bottom-right',
+}
+
+export interface Props extends ViewProps {
   size?: number;
   color?: string;
-  borderRadius?: number | string;
+  radius?: number;
   animate?: boolean;
-  value?: number | boolean | string;
-  limit?: number | boolean;
+  value?: number | string | boolean;
+  limit?: number;
+  parentRadius?: number;
+  position?: `${BadgePositions}`;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
 }
 
-export const Badge: React.FC<BadgeProps> = ({
+const Badge = ({
   size = 20,
   color = '#ff3b30',
-  borderRadius = '50%',
+  radius,
   animate = true,
   value,
   limit = 99,
+  parentRadius = 0,
+  position,
   style,
   textStyle,
   ...props
-}) => {
+}: Props) => {
   const toValue = value ? 1 : 0;
-  const [animatedValue] = useState(() => new Animated.Value(toValue));
+  const animatedValue = useRef(new Animated.Value(toValue)).current;
+  const hasContent = typeof value === 'number' || typeof value === 'string';
+  const minHeight = clamp(size, MIN_SIZE, MAX_SIZE) / 2;
+  const height = hasContent ? clamp(size, MIN_SIZE, MAX_SIZE) : minHeight;
 
   useEffect(() => {
-    Animated.spring(animatedValue, {
-      tension: 60,
-      friction: 6,
-      toValue: toValue,
-      useNativeDriver: true,
-    }).start();
-  }, [animatedValue, toValue]);
+    if (animate) {
+      if (toValue === 1) {
+        Animated.spring(animatedValue, {
+          toValue,
+          tension: 50,
+          friction: 6,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        animatedValue.setValue(0);
+      }
+    }
+  }, [animate, animatedValue, toValue]);
+
+  const offset = useMemo(() => {
+    // We want to place the badge at the point with polar coordinates (r,45°)
+    // thus we need to find the distance from the containing square top right corner
+    // which can be calculated as x = r - r × sin(45°)
+    // Self offset is how much we’ll shift the badge from the edge point,
+    // its value ranges from height / 4 (square) to height / 2 (circle)
+    const edgeOffset = parentRadius * (1 - Math.sin((45 * Math.PI) / 180));
+    const selfOffset = (1 + clamp(parentRadius / height, 0, 1)) * (height / 4);
+
+    return PixelRatio.roundToNearestPixel(edgeOffset - selfOffset);
+  }, [height, parentRadius]);
 
   if (!value) {
     return null;
   }
 
   let content = null;
-  let height = styles.root.minHeight;
 
-  if (typeof value === 'number' || typeof value === 'string') {
-    height = clamp(Math.round(size), minSize, maxSize);
-
+  if (hasContent) {
     const fontSize = PixelRatio.roundToNearestPixel(height * 0.6);
-    const displayValue = typeof value === 'number' && typeof limit === 'number' && value > limit ? `${limit}+` : value;
-    const textStyles = [
-      {
-        fontSize,
-        marginHorizontal: fontSize / 2,
-      },
-      styles.text,
-      textStyle,
-    ];
+    const textStyles = {
+      ...styles.text,
+      fontSize,
+      marginHorizontal: fontSize / 2,
+    };
 
     content = (
-      <Text style={textStyles} numberOfLines={1}>
-        {displayValue}
+      <Text style={[textStyles, textStyle]} numberOfLines={1} ellipsizeMode="clip">
+        {getBadgeValue(value, limit)}
       </Text>
     );
   }
 
-  const rootStyles = [
+  const rootStyles: Animated.AnimatedProps<ViewStyle[]> = [
     {
+      ...styles.root,
       height,
       minWidth: height,
       backgroundColor: color,
-      borderRadius: getRadius(borderRadius, height),
+      borderRadius: radius ?? height / 2,
+      transform: [{ scale: animatedValue }],
     },
-    styles.root,
-    style,
   ];
 
-  if (animate) {
-    rootStyles.push({ transform: [{ scale: animatedValue as any }] });
+  if (position) {
+    const [badgeY, badgeX] = position.split('-');
+    rootStyles.push({
+      ...styles.position,
+      [badgeY]: offset,
+      [badgeX]: offset,
+    });
   }
 
+  debug('RENDER <Badge>', value);
+
   return (
-    <Animated.View {...props} style={rootStyles}>
+    <Animated.View {...props} style={[rootStyles, style]}>
       {content}
     </Animated.View>
   );
@@ -101,10 +133,18 @@ export const Badge: React.FC<BadgeProps> = ({
 
 const styles = StyleSheet.create({
   root: {
-    minHeight: 10,
-    alignSelf: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  position: {
+    zIndex: 1,
+    position: 'absolute',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 1,
   },
   text: {
     color: '#fff',
@@ -115,3 +155,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+
+export default React.memo(Badge);

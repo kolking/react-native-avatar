@@ -1,24 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should not render when value = 0 1`] = `null`;
-
-exports[`should not render when value = undefined 1`] = `null`;
-
-exports[`should render normally 1`] = `
+exports[`should match snapshot 1`] = `
 <View
   collapsable={false}
   style={
-    Object {
+    {
       "alignItems": "center",
-      "alignSelf": "center",
       "backgroundColor": "#ff3b30",
       "borderRadius": 10,
+      "flexDirection": "row",
       "height": 20,
       "justifyContent": "center",
-      "minHeight": 10,
       "minWidth": 20,
-      "transform": Array [
-        Object {
+      "transform": [
+        {
           "scale": 1,
         },
       ],
@@ -26,19 +21,18 @@ exports[`should render normally 1`] = `
   }
 >
   <Text
+    ellipsizeMode="clip"
     numberOfLines={1}
     style={
-      Array [
-        Object {
-          "fontSize": 12,
-          "marginHorizontal": 6,
-        },
-        Object {
+      [
+        {
           "backgroundColor": "transparent",
           "color": "#fff",
           "fontFamily": "System",
+          "fontSize": 12,
           "fontWeight": "400",
           "includeFontPadding": false,
+          "marginHorizontal": 6,
           "textAlignVertical": "center",
         },
         undefined,
@@ -48,119 +42,4 @@ exports[`should render normally 1`] = `
     12
   </Text>
 </View>
-`;
-
-exports[`should render when greather than limit 1`] = `
-<View
-  collapsable={false}
-  style={
-    Object {
-      "alignItems": "center",
-      "alignSelf": "center",
-      "backgroundColor": "#ff3b30",
-      "borderRadius": 10,
-      "height": 20,
-      "justifyContent": "center",
-      "minHeight": 10,
-      "minWidth": 20,
-      "transform": Array [
-        Object {
-          "scale": 1,
-        },
-      ],
-    }
-  }
->
-  <Text
-    numberOfLines={1}
-    style={
-      Array [
-        Object {
-          "fontSize": 12,
-          "marginHorizontal": 6,
-        },
-        Object {
-          "backgroundColor": "transparent",
-          "color": "#fff",
-          "fontFamily": "System",
-          "fontWeight": "400",
-          "includeFontPadding": false,
-          "textAlignVertical": "center",
-        },
-        undefined,
-      ]
-    }
-  >
-    99+
-  </Text>
-</View>
-`;
-
-exports[`should render with custom props 1`] = `
-<View
-  collapsable={false}
-  style={
-    Object {
-      "alignItems": "center",
-      "alignSelf": "center",
-      "backgroundColor": "#ff3b30",
-      "borderRadius": 0,
-      "height": 16,
-      "justifyContent": "center",
-      "minHeight": 10,
-      "minWidth": 16,
-      "transform": Array [
-        Object {
-          "scale": 1,
-        },
-      ],
-    }
-  }
->
-  <Text
-    numberOfLines={1}
-    style={
-      Array [
-        Object {
-          "fontSize": 9.5,
-          "marginHorizontal": 4.75,
-        },
-        Object {
-          "backgroundColor": "transparent",
-          "color": "#fff",
-          "fontFamily": "System",
-          "fontWeight": "400",
-          "includeFontPadding": false,
-          "textAlignVertical": "center",
-        },
-        undefined,
-      ]
-    }
-  >
-    12
-  </Text>
-</View>
-`;
-
-exports[`should render without number 1`] = `
-<View
-  collapsable={false}
-  style={
-    Object {
-      "alignItems": "center",
-      "alignSelf": "center",
-      "backgroundColor": "#ff3b30",
-      "borderRadius": 5,
-      "height": 10,
-      "justifyContent": "center",
-      "minHeight": 10,
-      "minWidth": 10,
-      "transform": Array [
-        Object {
-          "scale": 1,
-        },
-      ],
-    }
-  }
-/>
 `;

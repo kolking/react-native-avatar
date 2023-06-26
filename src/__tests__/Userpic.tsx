@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, PixelRatio, StyleSheet, Text, View } from 'react-native';
 
 // Note: test renderer must be required after react-native.
 import TestRenderer, { act } from 'react-test-renderer';
@@ -7,164 +7,179 @@ import TestRenderer, { act } from 'react-test-renderer';
 /**
  * Under test
  */
-import { Userpic, UserpicProps as Props } from '../';
-import { Badge } from '../Badge';
+import { Userpic, UserpicProps } from '../';
+import { getGravatarSource, getInitials, getStringColor } from '../helpers';
 
-jest.mock('../Badge', () => ({ Badge: 'Badge' }));
+const createElement = (props: Partial<UserpicProps>) => <Userpic {...props} />;
 
-const createElement = (props: Partial<Props>) => <Userpic {...props} />;
+const createRenderer = (props: Partial<UserpicProps>) => TestRenderer.create(createElement(props));
 
-const createRenderer = (props: Partial<Props>) => TestRenderer.create(createElement(props));
-
-it('should render default image', () => {
-  expect(createRenderer({})).toMatchSnapshot();
+it('should match snapshot', () => {
+  expect(createRenderer({ badge: 35 })).toMatchSnapshot();
 });
 
-it('should render image', () => {
-  const tree = createRenderer({});
+it('should render network image', () => {
+  const source = { uri: 'image.png' };
+  const { root } = createRenderer({ source });
+
+  expect(root.findByType(Image).props.source).toStrictEqual(source);
+});
+
+it('should render local image', () => {
+  const source = require('../assets/custom.png');
+  const { root } = createRenderer({ source });
+
+  expect(root.findByType(Image).props.source).toStrictEqual(source);
+});
+
+it('should update image source', () => {
+  const source1 = { uri: 'image.png' };
+  const source2 = { uri: 'new-image.png' };
+  const tree = createRenderer({ source: source1 });
+
+  expect(tree.root.findByType(Image).props.source).toStrictEqual(source1);
 
   act(() => {
-    tree.update(createElement({ source: { uri: 'image.png' } }));
+    tree.update(createElement({ source: source2 }));
   });
 
-  expect(tree).toMatchSnapshot();
-});
-
-it('should render image as square', () => {
-  const tree = createRenderer({ borderRadius: 0, source: { uri: 'image.png' } });
-
-  act(() => {});
-
-  expect(tree).toMatchSnapshot();
+  expect(tree.root.findByType(Image).props.source).toStrictEqual(source2);
 });
 
 it('should render gravatar', () => {
-  const tree = createRenderer({});
+  const size = 35;
+  const email = 'user@email.com';
+  const source = getGravatarSource(size, email);
+  const { root } = createRenderer({ size, email });
 
-  act(() => {
-    tree.update(createElement({ email: 'user@email.com' }));
-  });
-
-  expect(tree).toMatchSnapshot();
+  expect(root.findByType(Image).props.source).toStrictEqual(source);
 });
 
-it('should render initials', () => {
-  const tree = createRenderer({});
+it('should render 2-letters initials', () => {
+  const size = 35;
+  const name = 'User Name';
+  const textStyle = { color: 'red' };
+  const { root } = createRenderer({ size, name, textStyle, colorize: true });
 
-  act(() => {
-    tree.update(createElement({ name: 'User Name', colorize: true }));
-  });
+  const text = root.findByType(Text);
 
-  expect(tree).toMatchSnapshot();
+  expect(text.props.children).toBe(getInitials(name));
+  expect(StyleSheet.flatten(text.props.style)).toEqual(
+    expect.objectContaining({
+      ...textStyle,
+      fontSize: PixelRatio.roundToNearestPixel(size / 2.5),
+    }),
+  );
+  expect(StyleSheet.flatten(text.parent?.props.style)).toEqual(
+    expect.objectContaining({
+      backgroundColor: getStringColor(name),
+    }),
+  );
 });
 
-it('should fallback to initials', () => {
-  const tree = createRenderer({});
+it('should render 1-letter initials', () => {
+  const name = 'Username';
+  const color = 'blue';
+  const { root } = createRenderer({ name, color, colorize: false });
 
-  act(() => {
-    tree.update(createElement({ name: 'User Name', email: 'user@email.com' }));
-  });
+  const text = root.findByType(Text);
 
-  const image = tree.root.findByType(Image);
+  expect(text.props.children).toBe(getInitials(name));
+  expect(StyleSheet.flatten(text.parent?.props.style)).toEqual(
+    expect.objectContaining({
+      backgroundColor: color,
+    }),
+  );
+});
+
+it('should render initials if source fails', () => {
+  const name = 'User Name';
+  const source = { uri: 'image.png' };
+  const { root } = createRenderer({ name, source });
+
+  const image = root.findByType(Image);
 
   act(() => image.props.onError());
 
-  expect(tree).toMatchSnapshot();
+  expect(root.findByType(Text).props.children).toBe(getInitials(name));
 });
 
-it('should render default image if no image', () => {
-  const tree = createRenderer({
-    source: { uri: 'image.png' },
-    defaultSource: { uri: 'default.png' },
-  });
+it('should render initials if gravatar fails', () => {
+  const name = 'User Name';
+  const email = 'user@email.com';
+  const { root } = createRenderer({ name, email });
 
-  act(() => {});
-
-  const image = tree.root.findByType(Image);
+  const image = root.findByType(Image);
 
   act(() => image.props.onError());
 
-  expect(tree).toMatchSnapshot();
+  expect(root.findByType(Text).props.children).toBe(getInitials(name));
 });
 
-it('should render default image if no gravatar', () => {
-  const tree = createRenderer({
-    email: 'user@email.com',
-    defaultSource: { uri: 'default.png' },
-  });
+it('should render default image if source fails', () => {
+  const source = { uri: 'image.png' };
+  const defaultSource = { uri: 'default.png' };
+  const { root } = createRenderer({ source, defaultSource });
 
-  act(() => {});
-
-  const image = tree.root.findByType(Image);
+  const image = root.findByType(Image);
 
   act(() => image.props.onError());
 
-  expect(tree).toMatchSnapshot();
+  expect(image.props.source).toStrictEqual(defaultSource);
 });
 
-it('should render default image if empty name', () => {
-  const tree = createRenderer({ name: '', defaultSource: { uri: 'default.png' } });
+it('should render default image if gravatar fails', () => {
+  const email = 'user@email.com';
+  const defaultSource = { uri: 'default.png' };
+  const { root } = createRenderer({ email, defaultSource });
 
-  act(() => {});
-
-  const image = tree.root.findByType(Image);
+  const image = root.findByType(Image);
 
   act(() => image.props.onError());
 
-  expect(tree).toMatchSnapshot();
+  expect(image.props.source).toStrictEqual(defaultSource);
 });
 
-it('should render as rounded square', () => {
-  const size = 50;
-  const tree = createRenderer({ size, borderRadius: 10 });
+it('should render default image if name is empty', () => {
+  const name = '';
+  const defaultSource = { uri: 'default.png' };
+  const { root } = createRenderer({ name, defaultSource });
 
-  act(() => {});
+  const image = root.findByType(Image);
 
-  const height = size - 10;
-  const { onLayout } = tree.root.findByType(Image).props;
-
-  act(() => {
-    onLayout({ nativeEvent: { layout: { height } } });
-  });
-
-  expect(tree).toMatchSnapshot();
+  expect(image.props.source).toStrictEqual(defaultSource);
 });
 
-const badgePositions: Props['badgePosition'][] = [
-  'top-right',
-  'bottom-right',
-  'bottom-left',
-  'top-left',
-];
+it('should render badge', () => {
+  const badge = 35;
+  const { root } = createRenderer({ badge });
 
-badgePositions.forEach((badgePosition) => {
-  it(`should render as circle with ${badgePosition} badge`, () => {
-    const tree = createRenderer({ badgePosition, badge: 1 });
+  expect(root.findByType(Text).props.children).toBe(badge);
+});
 
-    act(() => {});
+it('should render customized appearance', () => {
+  const props = {
+    size: 35,
+    color: 'blue',
+    radius: 15,
+    style: { borderWidth: 3, borderColor: 'purple' },
+  };
+  const { root } = createRenderer(props);
+  const wrapper = root.findByType(View);
+  const image = root.findByType(Image);
 
-    const height = 20;
-    const { onLayout } = tree.root.findByType(Badge).props;
+  expect(StyleSheet.flatten(wrapper.props.style)).toEqual(
+    expect.objectContaining({
+      width: props.size,
+      height: props.size,
+    }),
+  );
 
-    act(() => {
-      onLayout({ nativeEvent: { layout: { height } } });
-    });
-
-    expect(tree).toMatchSnapshot();
-  });
-
-  it(`should render as square with ${badgePosition} badge`, () => {
-    const tree = createRenderer({ badgePosition, badge: 1, borderRadius: 0 });
-
-    act(() => {});
-
-    const height = 20;
-    const { onLayout } = tree.root.findByType(Badge).props;
-
-    act(() => {
-      onLayout({ nativeEvent: { layout: { height } } });
-    });
-
-    expect(tree).toMatchSnapshot();
-  });
+  expect(StyleSheet.flatten(image.props.style)).toEqual(
+    expect.objectContaining({
+      ...props.style,
+      backgroundColor: props.color,
+      borderRadius: props.radius,
+    }),
+  );
 });
