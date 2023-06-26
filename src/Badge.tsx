@@ -51,7 +51,8 @@ const Badge = ({
   const toValue = value ? 1 : 0;
   const animatedValue = useRef(new Animated.Value(toValue)).current;
   const hasContent = typeof value === 'number' || typeof value === 'string';
-  const height = hasContent ? clamp(size, MIN_SIZE, MAX_SIZE) : styles.root.minHeight;
+  const minHeight = clamp(size, MIN_SIZE, MAX_SIZE) / 2;
+  const height = hasContent ? clamp(size, MIN_SIZE, MAX_SIZE) : minHeight;
 
   useEffect(() => {
     if (animate) {
@@ -132,7 +133,6 @@ const Badge = ({
 
 const styles = StyleSheet.create({
   root: {
-    minHeight: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
