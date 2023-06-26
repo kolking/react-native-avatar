@@ -31,7 +31,8 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./",
-    "validate": "yarn tsc && yarn lint --fix && yarn test -u"
+    "validate": "yarn tsc && yarn lint --fix && yarn test -u",
+    "validate-ci": "yarn tsc && yarn lint && yarn coverage"
   },
   "dependencies": {
     "js-md5": "^0.7.3"
