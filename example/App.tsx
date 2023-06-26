@@ -1,6 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import { Appearance, ImageSourcePropType, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { Userpic, UserpicProps } from 'react-native-userpic';
+import {
+  Appearance,
+  ImageSourcePropType,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
+import { Badge, Userpic, UserpicProps } from 'react-native-userpic';
 
 StatusBar.setBarStyle('light-content');
 
@@ -98,6 +106,17 @@ const App = () => {
         <Userpic radius={12} size={50} email="amandastone@mailto.plus" />
         <Userpic radius={18} size={75} email="lucyfoster@mailto.plus" />
       </View>
+      <TouchableHighlight
+        style={styles.button}
+        activeOpacity={0.5}
+        underlayColor="#00849C"
+        onPress={toggleBadge}
+      >
+        <>
+          <Text style={styles.buttonText}>Press me</Text>
+          <Badge value={badge} position="top-right" parentRadius={styles.button.borderRadius} />
+        </>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -128,6 +147,21 @@ const styles = StyleSheet.create({
   },
   badgeTextStyle: {
     marginHorizontal: 0,
+  },
+  button: {
+    width: 150,
+    height: 44,
+    marginTop: 20,
+    borderRadius: 22,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2FAFC7',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '600',
   },
 });
 
