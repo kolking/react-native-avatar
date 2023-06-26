@@ -12,7 +12,7 @@ import {
 
 import Initials from './Initials';
 import Badge, { Props as BadgeProps } from './Badge';
-import { colorScheme, debug, getGravatarSource } from './helpers';
+import { clamp, colorScheme, debug, getGravatarSource } from './helpers';
 
 const DEFAULT_COLOR = colorScheme('#aeaeb2', '#636366');
 const DEFAULT_SOURCE: ImageSourcePropType = require('./assets/default.png');
@@ -21,16 +21,16 @@ export interface Props extends ViewProps {
   size?: number;
   name?: string;
   email?: string;
-  color?: string;
   source?: ImageSourcePropType;
   defaultSource?: ImageSourcePropType;
-  borderRadius?: number;
+  color?: string;
+  radius?: number;
   colorize?: boolean;
   style?: StyleProp<ImageStyle>;
   textStyle?: StyleProp<TextStyle>;
   badge?: BadgeProps['value'];
   badgeColor?: BadgeProps['color'];
-  badgeProps?: Omit<BadgeProps, 'value' | 'color' | 'parentSize' | 'parentRadius'>;
+  badgeProps?: Omit<BadgeProps, 'value' | 'color' | 'parentRadius'>;
 }
 
 const Userpic = ({
@@ -38,9 +38,9 @@ const Userpic = ({
   name,
   email,
   source,
-  color = DEFAULT_COLOR,
   defaultSource = DEFAULT_SOURCE,
-  borderRadius = size / 2,
+  color = DEFAULT_COLOR,
+  radius = size / 2,
   colorize = false,
   style,
   textStyle,
@@ -54,6 +54,7 @@ const Userpic = ({
   }, [source, size, email, defaultSource]);
 
   const [imageSource, setImageSource] = useState(avatarSource);
+  const borderRadius = clamp(radius, 0, size / 2);
 
   useLayoutEffect(() => {
     setImageSource(avatarSource);
@@ -86,10 +87,10 @@ const Userpic = ({
       )}
       {badge !== undefined && (
         <Badge
+          position="top-right"
           {...badgeProps}
           value={badge}
           color={badgeColor}
-          parentSize={size}
           parentRadius={borderRadius}
         />
       )}

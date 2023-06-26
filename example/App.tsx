@@ -42,8 +42,8 @@ const App = () => {
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.label}>Shape</Text>
-        <Userpic borderRadius={0} />
-        <Userpic borderRadius={15} />
+        <Userpic radius={0} />
+        <Userpic radius={15} />
         <Userpic />
       </View>
       <View style={styles.row}>
@@ -70,28 +70,18 @@ const App = () => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Gravatar</Text>
-        <Userpic borderRadius={10} email="jasonsmith@mailto.plus" />
-        <Userpic borderRadius={10} email="amandastone@mailto.plus" />
-        <Userpic borderRadius={10} email="lucyfoster@mailto.plus" />
+        <Userpic radius={10} email="jasonsmith@mailto.plus" />
+        <Userpic radius={10} email="amandastone@mailto.plus" />
+        <Userpic radius={10} email="lucyfoster@mailto.plus" />
       </View>
       <View style={styles.row}>
         <Text style={styles.label} onPress={toggleBadge}>
           Badge
         </Text>
+        <Userpic email="jasonsmith@mailto.plus" badge={!!badge} badgeColor="#34c759" />
+        <Userpic radius={15} email="amandastone@mailto.plus" badge={badge} badgeColor="#007aff" />
         <Userpic
-          source={IMAGES[1]}
-          email="jasonsmith@mailto.plus"
-          badge={!!badge}
-          badgeColor="#34c759"
-        />
-        <Userpic
-          borderRadius={20}
-          email="amandastone@mailto.plus"
-          badge={badge}
-          badgeColor="#007aff"
-        />
-        <Userpic
-          borderRadius={10}
+          radius={10}
           email="lucyfoster@mailto.plus"
           badge={badge ? badge + 100 : undefined}
         />
@@ -104,9 +94,9 @@ const App = () => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Size</Text>
-        <Userpic borderRadius={8} size={30} email="jasonsmith@mailto.plus" />
-        <Userpic borderRadius={12} size={50} email="amandastone@mailto.plus" />
-        <Userpic borderRadius={18} size={75} email="lucyfoster@mailto.plus" />
+        <Userpic radius={8} size={30} email="jasonsmith@mailto.plus" />
+        <Userpic radius={12} size={50} email="amandastone@mailto.plus" />
+        <Userpic radius={18} size={75} email="lucyfoster@mailto.plus" />
       </View>
     </View>
   );

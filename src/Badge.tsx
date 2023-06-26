@@ -13,7 +13,7 @@ import {
 import { clamp, debug, getBadgeValue } from './helpers';
 
 const MIN_SIZE = 15;
-const MAX_SIZE = 40;
+const MAX_SIZE = 45;
 
 export enum BadgePositions {
   TOP_LEFT = 'top-left',
@@ -25,11 +25,10 @@ export enum BadgePositions {
 export interface Props extends ViewProps {
   size?: number;
   color?: string;
+  radius?: number;
   animate?: boolean;
-  borderRadius?: number;
-  value?: number | boolean | string;
+  value?: number | string | boolean;
   limit?: number;
-  parentSize?: number;
   parentRadius?: number;
   position?: `${BadgePositions}`;
   style?: StyleProp<ViewStyle>;
@@ -39,13 +38,12 @@ export interface Props extends ViewProps {
 const Badge = ({
   size = 20,
   color = '#ff3b30',
+  radius,
   animate = true,
-  borderRadius,
   value,
   limit = 99,
-  parentSize,
   parentRadius = 0,
-  position = BadgePositions.TOP_RIGHT,
+  position,
   style,
   textStyle,
   ...props
@@ -71,20 +69,16 @@ const Badge = ({
   }, [animate, animatedValue, toValue]);
 
   const offset = useMemo(() => {
-    if (!parentSize) {
-      return undefined;
-    }
-
     // We want to place the badge at the point with polar coordinates (r,45°)
     // thus we need to find the distance from the containing square top right corner
     // which can be calculated as x = r - r × sin(45°)
     // Self offset is how much we’ll shift the badge from the edge point,
-    // its value ranges from badgeHeight / 4 (square) to badgeHeight / 2 (circle)
+    // its value ranges from height / 4 (square) to height / 2 (circle)
     const edgeOffset = parentRadius * (1 - Math.sin((45 * Math.PI) / 180));
-    const selfOffset = height * (0.25 + parentRadius / (parentSize * 2));
+    const selfOffset = (1 + clamp(parentRadius / height, 0, 1)) * (height / 4);
 
     return PixelRatio.roundToNearestPixel(edgeOffset - selfOffset);
-  }, [height, parentRadius, parentSize]);
+  }, [height, parentRadius]);
 
   if (!value) {
     return null;
@@ -107,21 +101,25 @@ const Badge = ({
     );
   }
 
-  const [badgeY, badgeX] = position.split('-');
+  const rootStyles: Animated.AnimatedProps<ViewStyle[]> = [
+    {
+      ...styles.root,
+      height,
+      minWidth: height,
+      backgroundColor: color,
+      borderRadius: radius ?? height / 2,
+      transform: [{ scale: animatedValue }],
+    },
+  ];
 
-  const rootStyles = {
-    ...styles.root,
-    height,
-    minWidth: height,
-    backgroundColor: color,
-    borderRadius: borderRadius ?? height / 2,
-    transform: [{ scale: animatedValue }],
-    ...(offset !== undefined && {
+  if (position) {
+    const [badgeY, badgeX] = position.split('-');
+    rootStyles.push({
       ...styles.position,
       [badgeY]: offset,
       [badgeX]: offset,
-    }),
-  };
+    });
+  }
 
   debug('RENDER <Badge>', value);
 
@@ -158,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Badge;
+export default React.memo(Badge);
