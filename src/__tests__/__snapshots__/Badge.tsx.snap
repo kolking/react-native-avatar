@@ -11,7 +11,6 @@ exports[`should match snapshot 1`] = `
       "flexDirection": "row",
       "height": 20,
       "justifyContent": "center",
-      "minHeight": 10,
       "minWidth": 20,
       "transform": [
         {

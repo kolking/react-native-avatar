@@ -161,7 +161,7 @@ it('should render customized appearance', () => {
   const props = {
     size: 35,
     color: 'blue',
-    borderRadius: 15,
+    radius: 15,
     style: { borderWidth: 3, borderColor: 'purple' },
   };
   const { root } = createRenderer(props);
@@ -179,7 +179,7 @@ it('should render customized appearance', () => {
     expect.objectContaining({
       ...props.style,
       backgroundColor: props.color,
-      borderRadius: props.borderRadius,
+      borderRadius: props.radius,
     }),
   );
 });

@@ -35,7 +35,7 @@ it('should render customized appearance', () => {
     value: 12,
     size: 24,
     color: 'blue',
-    borderRadius: 3,
+    radius: 3,
     style: { minHeight: 5 },
     textStyle: { color: 'red' },
   };
@@ -51,7 +51,7 @@ it('should render customized appearance', () => {
       minWidth: props.size,
       minHeight: props.style.minHeight,
       backgroundColor: props.color,
-      borderRadius: props.borderRadius,
+      borderRadius: props.radius,
     }),
   );
 
