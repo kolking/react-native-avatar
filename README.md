@@ -11,7 +11,7 @@ The ultimate React Native component for displaying user avatars written in TypeS
 <img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/53d8eec3-6685-4b6b-9d85-261e7f391b11" />
 
 **Control the shape of the avatars**  
-The default circular shape can be changed by specifying a custom border radius. The `style` prop enables you to override the default styles, such as adding a border.
+The default circular shape can be changed by specifying a custom border radius. The `style` prop enables you to override the default styles.
 
 ---
 
