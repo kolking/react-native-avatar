@@ -1,6 +1,6 @@
 {
   "name": "react-native-userpic",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Display user avatars in React Native like a pro with support for Gravatar, user initials, unique colors, badges, statuses, and more.",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
