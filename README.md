@@ -1,10 +1,15 @@
 # React Native Userpic
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/877fbd1b-7040-41d4-a29b-80958b9b7cdd" />      
-
+<table>
+<tr>
+<td>
+<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/877fbd1b-7040-41d4-a29b-80958b9b7cdd" />
+</td>
+<td>
 The ultimate React Native component for displaying user avatars written in TypeScript with a strong focus on performance. This fully featured and highly customizable component allows you to show Gravatar images by providing an email address, fallback to user's initials, fine-tune the shape and size of avatars, add badges and custom statuses to the avatar image.
-
-<br clear="both" />
+</td>
+</tr>
+</table>
 
 ---
 
