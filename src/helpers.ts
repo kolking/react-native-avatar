@@ -3,7 +3,7 @@ import { Appearance, ImageSourcePropType, PixelRatio } from 'react-native';
 
 /* istanbul ignore next */
 export function debug(...args: any) {
-  if (process.env.NODE_ENV === 'development') {
+  if (__DEV__) {
     console.log(...args);
   }
 }
@@ -48,7 +48,7 @@ export function getInitials(name: string): string {
     output += [...(initials.pop() || '')][0];
   }
 
-  return output.toUpperCase();
+  return output?.toUpperCase?.() ?? "";
 }
 
 export function getBadgeValue(value: number | string | boolean, limit: number) {
