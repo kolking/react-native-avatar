@@ -68,7 +68,7 @@ const Userpic = ({
 
   return (
     <View {...props} style={[styles.root, { width: size, height: size }]}>
-      {name && imageSource === defaultSource ? (
+      {name?.trim() && imageSource === defaultSource ? (
         <Initials
           size={size}
           name={name}
