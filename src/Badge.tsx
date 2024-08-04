@@ -10,7 +10,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import { clamp, debug, getBadgeValue } from './helpers';
+import { clamp, getBadgeValue } from './helpers';
 
 const MIN_SIZE = 15;
 const MAX_SIZE = 45;
@@ -122,7 +122,7 @@ const Badge = ({
     });
   }
 
-  debug('RENDER <Badge>', value);
+  // debug('RENDER <Badge>', value);
 
   return (
     <Animated.View {...props} style={[rootStyles, style]}>
