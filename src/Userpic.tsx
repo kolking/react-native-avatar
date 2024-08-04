@@ -12,7 +12,7 @@ import {
 
 import Initials from './Initials';
 import Badge, { Props as BadgeProps } from './Badge';
-import { clamp, colorScheme, debug, getGravatarSource } from './helpers';
+import { clamp, colorScheme, getGravatarSource } from './helpers';
 
 const DEFAULT_COLOR = colorScheme('#aeaeb2', '#636366');
 const DEFAULT_SOURCE: ImageSourcePropType = require('./assets/default.png');
@@ -64,11 +64,11 @@ const Userpic = ({
     setImageSource(defaultSource);
   }, [defaultSource]);
 
-  debug('RENDER <Userpic>', name || email || imageSource);
+  // debug('RENDER <Userpic>', name || email || imageSource);
 
   return (
     <View {...props} style={[styles.root, { width: size, height: size }]}>
-      {name && imageSource === defaultSource ? (
+      {name?.trim() && imageSource === defaultSource ? (
         <Initials
           size={size}
           name={name}

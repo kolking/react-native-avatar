@@ -1,4 +1,4 @@
-import md5 from 'js-md5';
+import { md5 } from 'js-md5';
 import { Appearance, ImageSourcePropType, PixelRatio } from 'react-native';
 
 /* istanbul ignore next */
