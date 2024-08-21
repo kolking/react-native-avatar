@@ -7,12 +7,12 @@ import TestRenderer, { act } from 'react-test-renderer';
 /**
  * Under test
  */
-import { Userpic, UserpicProps } from '../';
+import { Avatar, AvatarProps } from '../';
 import { getGravatarSource, getInitials, getStringColor } from '../helpers';
 
-const createElement = (props: Partial<UserpicProps>) => <Userpic {...props} />;
+const createElement = (props: Partial<AvatarProps>) => <Avatar {...props} />;
 
-const createRenderer = (props: Partial<UserpicProps>) => TestRenderer.create(createElement(props));
+const createRenderer = (props: Partial<AvatarProps>) => TestRenderer.create(createElement(props));
 
 it('should match snapshot', () => {
   expect(createRenderer({ badge: 35 })).toMatchSnapshot();

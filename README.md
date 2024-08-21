@@ -1,9 +1,9 @@
-# React Native Userpic
+# React Native Avatar
 
 <table>
 <tr>
 <td width="228">
-<img width="200" src="https://github.com/kolking/react-native-userpic/assets/4656448/877fbd1b-7040-41d4-a29b-80958b9b7cdd" />
+<img width="200" src="https://github.com/kolking/react-native-avatar/assets/4656448/877fbd1b-7040-41d4-a29b-80958b9b7cdd" />
 </td>
 <td>
 The ultimate React Native component for displaying user avatars written in TypeScript with a strong focus on performance. This fully featured and highly customizable component allows you to show Gravatar images by providing an email address, fallback to user's initials, fine-tune the shape and size of avatars, add badges and custom statuses to the avatar image.
@@ -13,42 +13,42 @@ The ultimate React Native component for displaying user avatars written in TypeS
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/53d8eec3-6685-4b6b-9d85-261e7f391b11" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/53d8eec3-6685-4b6b-9d85-261e7f391b11" />
 
 **Control the shape of the avatars**  
 The default circular shape can be changed by specifying a custom border radius. The `style` prop enables you to override the default styles.
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/d7a4a923-fb79-4734-8092-7531835876ce" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/d7a4a923-fb79-4734-8092-7531835876ce" />
 
 **Custom fallback image or emoji**  
 For users without an image, you have the option to display the default avatar icon, provide a custom fallback image, or even show an emoji.
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/de5dfe87-37ba-49ad-ba73-1e7828c06468" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/de5dfe87-37ba-49ad-ba73-1e7828c06468" />
 
 **Fallback to user's initials**  
 Another option for users without an image is to display their initials. By enabling the `colorize` option, unique color can be generated based on the user's name.
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/06e2e2e6-10f7-420e-a381-3f2fd154b82a" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/06e2e2e6-10f7-420e-a381-3f2fd154b82a" />
 
 **Gravatar support**  
 Include the user's email address to display their Gravatar image. This can be combined with your own avatar image to provide a fallback option.
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/91f3bab9-f1cd-4d4d-9965-967ca524f484" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/91f3bab9-f1cd-4d4d-9965-967ca524f484" />
 
 **Numeric badges**  
 You can add a badge to display the count of unread messages or the online/offline status of the user. The position of the badge can also be customized.
 
 ---
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/9b7a07b9-b988-492c-b9d0-e74e3e3208ed" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/9b7a07b9-b988-492c-b9d0-e74e3e3208ed" />
 
 **Custom badges**  
 Another option for utilizing avatar badges is to display a custom status icon, such as an emoji, for example.
@@ -59,11 +59,11 @@ Another option for utilizing avatar badges is to display a custom status icon, s
 
 ### yarn
 ```sh
-yarn add react-native-userpic
+yarn add @kolking/react-native-avatar
 ```
 ### npm
 ```sh
-npm install react-native-userpic
+npm install @kolking/react-native-avatar
 ```
 
 ## Basic Example
@@ -71,11 +71,11 @@ npm install react-native-userpic
 ```jsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Userpic } from 'react-native-userpic';
+import { Avatar } from '@kolking/react-native-avatar';
 
 const MyComponent = ({ userImage, userEmail }) => (
   <View style={styles.wrapper}>
-    <Userpic source={{ uri: userImage }} email={userEmail} />
+    <Avatar source={{ uri: userImage }} email={userEmail} />
   </View>
 );
 
@@ -95,7 +95,7 @@ export default MyComponent;
 ```jsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Userpic } from 'react-native-userpic';
+import { Avatar } from '@kolking/react-native-avatar';
 
 const defaultImage = require('./assets/defaultAvatar.png');
 const badgeProps = {
@@ -106,7 +106,7 @@ const badgeProps = {
 
 const MyComponent = ({ userImage, userEmail, userName, unreadCount }) => (
   <View style={styles.wrapper}>
-    <Userpic
+    <Avatar
       size={60}
       defaultSource={defaultImage}
       source={{ uri: userImage }}
@@ -152,7 +152,7 @@ Prop | Type | Default | Description
 
 ## Badge Component
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/6ee48b43-d2ac-40bb-ab21-152a93637e4a" />
+<img width="200" align="left" src="https://github.com/kolking/react-native-avatar/assets/4656448/6ee48b43-d2ac-40bb-ab21-152a93637e4a" />
 
 The badge can be used as a standalone component. The font size of the badge text value is calculated based on the `size` prop, so you normally don't have to specify it. By default, the badge appears with a spring animation, which can be disabled using the `animate` prop. To position the badge absolutely over its parent, use the `position` prop along with the `parentRadius` prop.
 
@@ -161,7 +161,7 @@ The badge can be used as a standalone component. The font size of the badge text
 ```jsx
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { Badge } from 'react-native-userpic';
+import { Badge } from '@kolking/react-native-avatar';
 
 const MyComponent = () => {
   const [badge, setBadge] = useState(0);
@@ -225,7 +225,7 @@ Prop | Type | Default | Description
 
 ## Feedback
 
-I appreciate your feedback, so please star the repository if you like it. This is the best motivation for me to maintain the package and add new features. If you have any feature requests, found a bug, or have ideas for improvement, feel free to [open an issue](https://github.com/kolking/react-native-userpic/issues).
+I appreciate your feedback, so please star the repository if you like it. This is the best motivation for me to maintain the package and add new features. If you have any feature requests, found a bug, or have ideas for improvement, feel free to [open an issue](https://github.com/kolking/react-native-avatar/issues).
 
 ## License
 

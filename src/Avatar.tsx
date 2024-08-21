@@ -33,7 +33,7 @@ export interface Props extends ViewProps {
   badgeProps?: Omit<BadgeProps, 'value' | 'color' | 'parentRadius'>;
 }
 
-const Userpic = ({
+const Avatar = ({
   size = 50,
   name,
   email,
@@ -64,7 +64,7 @@ const Userpic = ({
     setImageSource(defaultSource);
   }, [defaultSource]);
 
-  // debug('RENDER <Userpic>', name || email || imageSource);
+  // debug('RENDER <Avatar>', name || email || imageSource);
 
   return (
     <View {...props} style={[styles.root, { width: size, height: size }]}>
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(Userpic);
+export default React.memo(Avatar);
