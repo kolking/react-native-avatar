@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Userpic, UserpicProps } from 'react-native-userpic';
+import { Avatar, AvatarProps } from '@kolking/react-native-avatar';
 
-const badgeProps: UserpicProps[] = [
+const badgeProps: AvatarProps[] = [
   {
     defaultSource: require('./assets/custom.png'),
   },
@@ -79,7 +79,7 @@ const App = () => {
   return (
     <View style={styles.wrapper}>
       <Pressable onPress={toggleProps}>
-        <Userpic size={100} color="#636366" {...badgeProps[props]} />
+        <Avatar size={100} color="#636366" {...badgeProps[props]} />
       </Pressable>
     </View>
   );

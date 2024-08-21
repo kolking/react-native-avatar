@@ -1,16 +1,16 @@
 {
-  "name": "react-native-userpic",
+  "name": "@kolking/react-native-avatar",
   "version": "2.0.3",
   "description": "Display user avatars in React Native like a pro with support for Gravatar, user initials, unique colors, badges, statuses, and more.",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
-  "homepage": "https://github.com/kolking/react-native-userpic#readme",
+  "homepage": "https://github.com/kolking/react-native-avatar#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://kolking@github.com/kolking/react-native-userpic.git"
+    "url": "git+https://kolking@github.com/kolking/react-native-avatar.git"
   },
   "bugs": {
-    "url": "https://github.com/kolking/react-native-userpic/issues"
+    "url": "https://github.com/kolking/react-native-avatar/issues"
   },
   "keywords": [
     "react-native",
@@ -19,6 +19,7 @@
     "userpic",
     "avatar",
     "gravatar",
+    "avatar image",
     "user picture",
     "user image",
     "user avatar",

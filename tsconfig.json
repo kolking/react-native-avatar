@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-userpic": ["./src/index"]
+      "@kolking/react-native-avatar": ["./src/index"]
     }
   }
 }

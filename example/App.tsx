@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { Badge, Userpic, UserpicProps } from 'react-native-userpic';
+import { Badge, Avatar, AvatarProps } from '@kolking/react-native-avatar';
 
 StatusBar.setBarStyle('light-content');
 
@@ -50,45 +50,45 @@ const App = () => {
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.label}>Shape</Text>
-        <Userpic radius={0} />
-        <Userpic radius={15} />
-        <Userpic />
+        <Avatar radius={0} />
+        <Avatar radius={15} />
+        <Avatar />
       </View>
       <View style={styles.row}>
         <Text style={styles.label} onPress={toggleBadImage}>
           No image
         </Text>
-        <Userpic source={badImage} />
-        <Userpic defaultSource={require('./assets/custom.png')} />
-        <Userpic name="👩" />
+        <Avatar source={badImage} />
+        <Avatar defaultSource={require('./assets/custom.png')} />
+        <Avatar name="👩" />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Initials</Text>
-        <Userpic name="Nick" color="gray" />
-        <Userpic name="Jason Smith" colorize={true} />
-        <Userpic name="Emma Miller" email="nogravatar@email.com" colorize={true} />
+        <Avatar name="Nick" color="gray" />
+        <Avatar name="Jason Smith" colorize={true} />
+        <Avatar name="Emma Miller" email="nogravatar@email.com" colorize={true} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label} onPress={toggleImage}>
           Image
         </Text>
-        <Userpic source={IMAGES[image]} />
-        <Userpic source={IMAGES[3]} />
-        <Userpic source={IMAGES[6]} />
+        <Avatar source={IMAGES[image]} />
+        <Avatar source={IMAGES[3]} />
+        <Avatar source={IMAGES[6]} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Gravatar</Text>
-        <Userpic radius={10} email="jasonsmith@mailto.plus" />
-        <Userpic radius={10} email="amandastone@mailto.plus" />
-        <Userpic radius={10} email="lucyfoster@mailto.plus" />
+        <Avatar radius={10} email="jasonsmith@mailto.plus" />
+        <Avatar radius={10} email="amandastone@mailto.plus" />
+        <Avatar radius={10} email="lucyfoster@mailto.plus" />
       </View>
       <View style={styles.row}>
         <Text style={styles.label} onPress={toggleBadge}>
           Badge
         </Text>
-        <Userpic email="jasonsmith@mailto.plus" badge={!!badge} badgeColor="#34c759" />
-        <Userpic radius={15} email="amandastone@mailto.plus" badge={badge} badgeColor="#007aff" />
-        <Userpic
+        <Avatar email="jasonsmith@mailto.plus" badge={!!badge} badgeColor="#34c759" />
+        <Avatar radius={15} email="amandastone@mailto.plus" badge={badge} badgeColor="#007aff" />
+        <Avatar
           radius={10}
           email="lucyfoster@mailto.plus"
           badge={badge ? badge + 100 : undefined}
@@ -96,15 +96,15 @@ const App = () => {
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Status</Text>
-        <Userpic email="jasonsmith@mailto.plus" badge="👋" badgeProps={statusBadgeProps} />
-        <Userpic email="amandastone@mailto.plus" badge="😀" badgeProps={statusBadgeProps} />
-        <Userpic email="lucyfoster@mailto.plus" badge="🐵" badgeProps={statusBadgeProps} />
+        <Avatar email="jasonsmith@mailto.plus" badge="👋" badgeProps={statusBadgeProps} />
+        <Avatar email="amandastone@mailto.plus" badge="😀" badgeProps={statusBadgeProps} />
+        <Avatar email="lucyfoster@mailto.plus" badge="🐵" badgeProps={statusBadgeProps} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Size</Text>
-        <Userpic radius={8} size={30} email="jasonsmith@mailto.plus" />
-        <Userpic radius={12} size={50} email="amandastone@mailto.plus" />
-        <Userpic radius={18} size={75} email="lucyfoster@mailto.plus" />
+        <Avatar radius={8} size={30} email="jasonsmith@mailto.plus" />
+        <Avatar radius={12} size={50} email="amandastone@mailto.plus" />
+        <Avatar radius={18} size={75} email="lucyfoster@mailto.plus" />
       </View>
       <TouchableHighlight
         style={styles.button}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const statusBadgeProps: UserpicProps['badgeProps'] = {
+const statusBadgeProps: AvatarProps['badgeProps'] = {
   size: 22,
   position: 'bottom-right',
   style: styles.badgeStyle,
