@@ -8,6 +8,7 @@ import {
   TextStyle,
   View,
   ViewProps,
+  ViewStyle,
 } from 'react-native';
 
 import Initials from './Initials';
@@ -26,7 +27,7 @@ export interface Props extends ViewProps {
   color?: string;
   radius?: number;
   colorize?: boolean;
-  style?: StyleProp<ImageStyle>;
+  style?: StyleProp<ImageStyle & ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   badge?: BadgeProps['value'];
   badgeColor?: BadgeProps['color'];
