@@ -1,6 +1,6 @@
 {
   "name": "@kolking/react-native-avatar",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Display user avatars in React Native like a pro with support for Gravatar, user initials, unique colors, badges, statuses, and more.",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
