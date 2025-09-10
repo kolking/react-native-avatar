@@ -21,7 +21,11 @@ const Initials = ({ size, name, color, colorize, borderRadius, style, textStyle 
 
   return (
     <View style={[styles.root, { borderRadius, backgroundColor }, style]}>
-      <Text style={[styles.text, { fontSize }, textStyle]} numberOfLines={1} allowFontScaling={false}>
+      <Text
+        style={[styles.text, { fontSize }, textStyle]}
+        numberOfLines={1}
+        allowFontScaling={false}
+      >
         {initials}
       </Text>
     </View>
