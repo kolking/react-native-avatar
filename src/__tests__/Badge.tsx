@@ -13,7 +13,13 @@ import Badge, { Props as BadgeProps, BadgePositions } from '../Badge';
 
 const createElement = (props: Partial<BadgeProps>) => <Badge {...props} />;
 
-const createRenderer = (props: Partial<BadgeProps>) => TestRenderer.create(createElement(props));
+const createRenderer = (props: Partial<BadgeProps>) => {
+  let renderer!: TestRenderer.ReactTestRenderer;
+  act(() => {
+    renderer = TestRenderer.create(createElement(props));
+  });
+  return renderer;
+};
 
 it('should match snapshot', () => {
   expect(createRenderer({ value: 12 })).toMatchSnapshot();
@@ -120,7 +126,7 @@ describe('animation', () => {
     expect(Animated.spring).not.toBeCalled();
   });
 
-  it('should not animate when numeric value changes', () => {
+  it('should keep the badge visible when numeric value changes', () => {
     const tree = createRenderer({ value: 1 });
 
     Animated.spring.mockClear();
@@ -129,9 +135,8 @@ describe('animation', () => {
       tree.update(createElement({ value: 2 }));
     });
 
-    expect(Animated.spring).toBeCalledWith(expect.objectContaining({ _value: 1 }), config);
-    expect(Animated.spring).toBeCalledTimes(1);
-    expect(start).toBeCalled();
+    expect(Animated.spring).not.toBeCalled();
+    expect(tree.root.findByType(Text).props.children).toBe(2);
   });
 
   it('should animate when zero value changes to number', () => {

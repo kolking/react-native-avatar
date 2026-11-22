@@ -2,10 +2,9 @@
 #import <XCTest/XCTest.h>
 
 #import <React/RCTLog.h>
-#import <React/RCTRootView.h>
 
 #define TIMEOUT_SECONDS 600
-#define TEXT_TO_LOOK_FOR @"Welcome to React"
+#define TEXT_TO_LOOK_FOR @"Shape"
 
 @interface exampleTests : XCTestCase
 
@@ -28,7 +27,8 @@
 
 - (void)testRendersWelcomeScreen
 {
-  UIViewController *vc = [[[RCTSharedApplication() delegate] window] rootViewController];
+  UIWindowScene *windowScene = (UIWindowScene *)[[RCTSharedApplication() connectedScenes] anyObject];
+  UIViewController *vc = windowScene.windows.firstObject.rootViewController;
   NSDate *date = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
   BOOL foundElement = NO;
 
