@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native/typescript-config",
+  "compilerOptions": {
+    "types": ["jest", "node"],
+    "paths": {
+      "@kolking/react-native-avatar": ["../src/index"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

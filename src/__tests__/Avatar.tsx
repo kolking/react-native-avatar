@@ -12,7 +12,13 @@ import { getGravatarSource, getInitials, getStringColor } from '../helpers';
 
 const createElement = (props: Partial<AvatarProps>) => <Avatar {...props} />;
 
-const createRenderer = (props: Partial<AvatarProps>) => TestRenderer.create(createElement(props));
+const createRenderer = (props: Partial<AvatarProps>) => {
+  let renderer!: TestRenderer.ReactTestRenderer;
+  act(() => {
+    renderer = TestRenderer.create(createElement(props));
+  });
+  return renderer;
+};
 
 it('should match snapshot', () => {
   expect(createRenderer({ badge: 35 })).toMatchSnapshot();

@@ -1,7 +1,7 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json",
+  "extends": "@react-native/typescript-config",
   "compilerOptions": {
-    "baseUrl": "./",
+    "types": ["jest", "node"],
     "paths": {
       "@kolking/react-native-avatar": ["./src/index"]
     }
